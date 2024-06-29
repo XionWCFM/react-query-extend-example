@@ -18,6 +18,6 @@ export const useExtendedMutation = <TData = unknown, TError = DefaultError, TVar
 ) => {
   const isPendingRef = useRef(false);
   const mutationByTanstack = useMutation<TData, TError, TVariables, TContext>(options, queryClient);
-  const createMutation = () => new MutationBuilder(mutationByTanstack.mutateAsync, singleFlight, isPendingRef);
+  const createMutation = () => new MutationBuilder(mutationByTanstack.mutateAsync, singleFlight);
   return Object.assign(mutationByTanstack, { createMutation, isPendingRef });
 };

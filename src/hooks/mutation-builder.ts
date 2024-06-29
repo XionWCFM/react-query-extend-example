@@ -4,30 +4,22 @@ import { debounce } from "./debounce";
 
 type MutationFunction<T, Args extends any[]> = (...args: Args) => Promise<T>;
 
-export class MutationBuilder<T, Args extends any[], IsDebounce extends boolean = false> {
-  private fn: MutationFunction<T, Args>;
+export class MutationBuilder<TData, Args extends any[], IsDebounce extends boolean = false> {
+  private fn: MutationFunction<TData, Args>;
   private singleFlightInstance: SingleFlight;
   private debounceOptions: DebounceOptions = { ms: 0 };
   private isDebounce: boolean = false;
-  private isPendingRefUse: boolean = false;
   private isSingleFlight: boolean = false;
-  private isPending: { current: boolean };
-
-  constructor(fn: (...args: Args) => T, singleFlight: SingleFlight, isPending: { current: boolean }) {
+  private isInternalPending: boolean = false;
+  constructor(fn: (...args: Args) => TData, singleFlight: SingleFlight) {
     this.fn = async (...args: Args) => fn(...args);
     this.singleFlightInstance = singleFlight;
-    this.isPending = isPending;
   }
 
-  pendingRef() {
-    this.isPendingRefUse = true;
-    return this;
-  }
-
-  debounce(options: DebounceOptions): MutationBuilder<T, Args, true> {
+  debounce(options: DebounceOptions): MutationBuilder<TData, Args, true> {
     this.isDebounce = true;
     this.debounceOptions = options;
-    return this as unknown as MutationBuilder<T, Args, true>;
+    return this as unknown as MutationBuilder<TData, Args, true>;
   }
 
   singleFlight() {
@@ -35,17 +27,8 @@ export class MutationBuilder<T, Args extends any[], IsDebounce extends boolean =
     return this;
   }
 
-  done(): IsDebounce extends true ? (...args: Args) => Promise<T | null> : (...args: Args) => Promise<T> {
+  done(): IsDebounce extends true ? (...args: Args) => Promise<TData | null> : (...args: Args) => Promise<TData> {
     let mutation = this.fn;
-
-    if (this.isPendingRefUse) {
-      mutation = async (...args: Args) => {
-        this.isPending.current = true;
-        const res = await this.fn(...args);
-        this.isPending.current = false;
-        return res;
-      };
-    }
 
     if (this.isSingleFlight) {
       const singleFlightMutation = this.singleFlightInstance.execute(mutation);
@@ -57,9 +40,11 @@ export class MutationBuilder<T, Args extends any[], IsDebounce extends boolean =
 
     if (this.isDebounce) {
       //@ts-ignore
-      mutation = debounce(mutation, this.debounceOptions) as MutationFunction<T | null, Args>;
+      mutation = debounce(mutation, this.debounceOptions) as MutationFunction<TData | null, Args>;
     }
 
-    return mutation as IsDebounce extends true ? (...args: Args) => Promise<T | null> : (...args: Args) => Promise<T>;
+    return mutation as IsDebounce extends true
+      ? (...args: Args) => Promise<TData | null>
+      : (...args: Args) => Promise<TData>;
   }
 }

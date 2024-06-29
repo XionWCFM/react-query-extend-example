@@ -9,15 +9,6 @@ describe("", () => {
       wrapper: wrapper(),
     });
 
-  it("isPendingRef가 적절히 동작합니다.", async () => {
-    const { result } = setup();
-    const { createMutation, isPendingRef } = result.current;
-    const getter = createMutation().pendingRef().done();
-    expect(isPendingRef.current).toBe(false);
-    getter();
-    expect(isPendingRef.current).toBe(true);
-  });
-
   it("singleFlightTest", async () => {
     const { result } = setup();
     const { createMutation, isPendingRef } = result.current;
@@ -70,7 +61,7 @@ describe("", () => {
   it("intergration test", async () => {
     const { result } = setup();
     const { createMutation, isPendingRef } = result.current;
-    const getter = createMutation().debounce({ ms: 100 }).singleFlight().pendingRef().done();
+    const getter = createMutation().debounce({ ms: 100 }).singleFlight().done();
     const value = await Promise.all([getter(), getter(), getter(), getter(), getter(), getter()]);
     vi.advanceTimersByTime(100);
     expect(mockFn).toBeCalledTimes(1);
