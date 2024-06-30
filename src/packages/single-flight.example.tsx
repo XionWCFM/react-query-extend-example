@@ -23,13 +23,6 @@ export const useSingleFlight = () => {
   return context;
 };
 
-interface A {
-  ok?: boolean;
-}
-
-const a: A = { ok: undefined };
-const b: A = {};
-
 const useSingleFlightMutation = () => {
   const singleFlight = useSingleFlight();
   const mutation = useMutation({
