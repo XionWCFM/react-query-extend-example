@@ -4,6 +4,7 @@ import { useExtendedMutation } from "~/src/hooks/builder";
 import { MutationBuilder } from "~/src/hooks/mutation-builder";
 import { SingleFlight } from "~/src/hooks/single-flight";
 import { ClientOnlyPortal } from "~/src/portal/client-only-portal";
+import { toast } from "~/src/portal/toast";
 
 const singleFLight = new SingleFlight();
 export default function Home() {
@@ -18,9 +19,14 @@ export default function Home() {
 
   return (
     <div className="">
-      <ClientOnlyPortal selector={"#toast"}>
-        <div className="">hello world</div>
-      </ClientOnlyPortal>
+      <div className=""></div>
+      <button
+        onClick={() => {
+          toast.show({ title: "hello" });
+        }}
+      >
+        토스트
+      </button>
       <button
         onClick={() => {
           const button = document.querySelector("#hello");
