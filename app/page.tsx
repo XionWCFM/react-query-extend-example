@@ -3,6 +3,7 @@
 import { useExtendedMutation } from "~/src/hooks/builder";
 import { MutationBuilder } from "~/src/hooks/mutation-builder";
 import { SingleFlight } from "~/src/hooks/single-flight";
+import { ClientOnlyPortal } from "~/src/portal/client-only-portal";
 
 const singleFLight = new SingleFlight();
 export default function Home() {
@@ -14,16 +15,12 @@ export default function Home() {
   const mutation = createMutation().singleFlight().debounce({ ms: 500, leading: false }).done();
   const mutationBuilder = new MutationBuilder(mutateAsync, singleFLight);
   const hello = mutationBuilder.singleFlight().done();
-  const handleClick = async () => {
-    console.log("요청 시작", mutationBuilder.isPending);
-    await hello();
-    console.log("요청 끝", mutationBuilder.isPending);
-  };
+
   return (
     <div className="">
-      <button id="hello" onClick={handleClick}>
-        클릭
-      </button>
+      <ClientOnlyPortal selector={"#toast"}>
+        <div className="">hello world</div>
+      </ClientOnlyPortal>
       <button
         onClick={() => {
           const button = document.querySelector("#hello");
