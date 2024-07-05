@@ -1,4 +1,3 @@
-
 import { Pubsub } from "../packages/pub-sub";
 
 export type ToastEvent = "add" | "delete" | "clear";
@@ -6,7 +5,7 @@ export type ToastEvent = "add" | "delete" | "clear";
 export type ToastType = {
   id: string;
   title: string;
-  option: "success" | "error" | "warning";
+  option: "success" | "error";
   time: number;
 };
 
@@ -24,16 +23,21 @@ export type ToastAction = AddAction | DeleteAction;
 
 export type ToastParamType = Partial<Pick<ToastType, "title" | "option" | "time">>;
 
-
+export type ToastOmitOptionType = Omit<ToastParamType, "option">;
 
 export const toastPubsub = new Pubsub<ToastEvent>();
 
-
 export const toast = {
   show: (param: ToastParamType) => {
-    toastPubsub.publish("add", param);
+    toastPubsub.publish<ToastParamType>("add", param);
   },
   delete: (id: string) => {
-    toastPubsub.publish("delete", { id });
+    toastPubsub.publish<DeleteAction["payload"]>("delete", { id });
+  },
+  success: (param: ToastOmitOptionType) => {
+    toastPubsub.publish<ToastParamType>("add", { ...param, option: "success" });
+  },
+  error: (param: ToastOmitOptionType) => {
+    toastPubsub.publish<ToastParamType>("add", { ...param, option: "error" });
   },
 };

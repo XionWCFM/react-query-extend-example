@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "~/src/apps/providers";
 import { Toaster } from "~/src/portal/toast-client";
-
+import { Logger } from "~/src/logger/root";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
+            <div className=" bg-white min-w-[420px]">{children}</div>
+          </div>
+          <Logger />
+        </Providers>
         <Toaster />
         <div id="toast" />
         <div id="dialog" />

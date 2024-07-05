@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useReducer, useRef } from "react";
-import { ClientOnlyPortal } from "./client-only-portal";
 import { ToastType, ToastAction, ToastParamType, toastPubsub } from "./toast";
+import * as ToastPrimitives from "@radix-ui/react-toast";
 
 const initialState: ToastType[] = [];
 
@@ -27,11 +27,6 @@ export const Toaster = () => {
       const option = toast.option ?? "success";
       const time = toast.time ?? 1500;
       dispatch({ type: "add", payload: { id, title, option, time } });
-      let timeoutid = setTimeout(() => {
-        dispatch({ type: "delete", payload: { id } });
-        clearTimeout(timeoutid);
-      }, time);
-      timeoutIds.current[id] = timeoutid;
     };
 
     const deleteHandler = (id: ToastType["id"]) => {
@@ -43,20 +38,19 @@ export const Toaster = () => {
     return () => {
       toastPubsub.unsubscribe("add", addHandler);
       toastPubsub.unsubscribe("delete", deleteHandler);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      Object.values(timeoutIds.current).forEach(clearTimeout);
     };
   }, []);
 
   return (
-    <ClientOnlyPortal selector={"#toast"}>
-      <div className=" fixed  bottom-0 left-[50%] translate-x-[-50%]  flex flex-col gap-y-16">
-        {state.map((toast) => (
-          <div key={toast.id} className=" bg-purple-300 px-16 py-4 text-purple-800 rounded-full">
-            {toast.title}
-          </div>
-        ))}
-      </div>
-    </ClientOnlyPortal>
+    // <ClientOnlyPortal selector={"#toast"}>
+    <ToastPrimitives.Provider duration={5000}>
+      {state.map((toast) => (
+        <ToastPrimitives.Root key={toast.id} duration={toast.time}>
+          <ToastPrimitives.Title className=" bg-purple-50 ">{toast.title}</ToastPrimitives.Title>
+        </ToastPrimitives.Root>
+      ))}
+      <ToastPrimitives.Viewport className=" fixed bottom-0 left-[50%] translate-x-[-50%]  flex flex-col gap-y-16" />
+    </ToastPrimitives.Provider>
+    // </ClientOnlyPortal>
   );
 };

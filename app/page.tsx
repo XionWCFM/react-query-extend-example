@@ -1,43 +1,55 @@
 "use client";
 
-import { useExtendedMutation } from "~/src/hooks/builder";
-import { MutationBuilder } from "~/src/hooks/mutation-builder";
-import { SingleFlight } from "~/src/hooks/single-flight";
-import { ClientOnlyPortal } from "~/src/portal/client-only-portal";
-import { toast } from "~/src/portal/toast";
+import { useMutation } from "@tanstack/react-query";
+import { debounce } from "lodash";
+import { useCallback, useRef, useState } from "react";
+import { throttle } from "~/src/packages/throttle";
 
-const singleFLight = new SingleFlight();
+const useThrottle = <T extends (...args: any[]) => void>(fn: T, ms: number) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(throttle(fn, ms), []);
+};
+
 export default function Home() {
-  const mutationFn = async () => {
-    await new Promise((res) => setTimeout(res, 1000));
-    console.log("hello world");
+  const [_, setForce] = useState(0);
+  const tanstack = useMutation({
+    mutationFn: async () => {
+      console.log("몇번이나 실행될까요?");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return "tanstack";
+    },
+  });
+  const throttleFn = useThrottle(tanstack.mutateAsync, 1000);
+  const handleClick = throttle(async () => {
+    await throttleFn();
+  }, 5000);
+
+  const handleAbnormalClick = () => {
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(() => {
+      document.getElementById("tanstack")?.click();
+    });
   };
-  const { isPendingRef, mutateAsync, createMutation } = useExtendedMutation({ mutationFn });
-  const mutation = createMutation().singleFlight().debounce({ ms: 500, leading: false }).done();
-  const mutationBuilder = new MutationBuilder(mutateAsync, singleFLight);
-  const hello = mutationBuilder.singleFlight().done();
 
   return (
-    <div className="">
-      <div className=""></div>
-      <button
-        onClick={() => {
-          toast.show({ title: "hello" });
-        }}
-      >
-        토스트
-      </button>
-      <button
-        onClick={() => {
-          const button = document.querySelector("#hello");
-          for (let i = 0; i < 10; i++) {
-            //@ts-ignore
-            button?.click();
-          }
-        }}
-      >
-        인위적 여러번 클릭
-      </button>
+    <div>
+      <div className="">
+        <button onClick={() => setForce((p) => p + 1)}>상태업데이트</button>
+      </div>
+      <div>
+        <button className=" px-4 py-2 bg-purple-700 rounded-full text-white" id="tanstack" onClick={handleClick}>
+          클릭 당할 버튼
+        </button>
+      </div>
+
+      <div className=" mt-16">
+        <button
+          className=" px-4 py-2 bg-purple-700 rounded-full text-white"
+          id="tanstack"
+          onClick={handleAbnormalClick}
+        >
+          인위적인 수차례의 클릭
+        </button>
+      </div>
     </div>
   );
 }
