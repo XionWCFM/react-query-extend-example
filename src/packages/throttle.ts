@@ -1,5 +1,6 @@
-export function throttle<F extends (...args: any[]) => void>(func: F, throttleMs: number): F {
+export function throttle<F extends (...args: any[]) => void>(func: F, throttleMs: number): F & { reset: () => void } {
   let lastCallTime: number | null;
+  let timeoutId: NodeJS.Timeout | null = null;
 
   const throttledFunction = function (...args: Parameters<F>) {
     const now = Date.now();
@@ -8,7 +9,15 @@ export function throttle<F extends (...args: any[]) => void>(func: F, throttleMs
       lastCallTime = now;
       func(...args);
     }
-  } as F;
+  };
 
-  return throttledFunction;
+  throttledFunction.reset = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    lastCallTime = null;
+  };
+
+  return throttledFunction as F & { reset: () => void };
 }
