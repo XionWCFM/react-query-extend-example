@@ -3117,6 +3117,11 @@ optionator@^0.9.3:
     type-check "^0.4.0"
     word-wrap "^1.2.5"
 
+overlay-kit@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/overlay-kit/-/overlay-kit-1.2.1.tgz#a9173a1c287a5c65070427799f24a3cbc2a70f8f"
+  integrity sha512-VyNa9Lj9QWo1LVM4Xcj7Teh3cBGMmSvok125Qdd/qaSJrP2bUMoHJRvCI19Z1D7KxacEftZ7FNnhKKUZriuIGA==
+
 p-limit@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.1.0.tgz#e1daccbe78d0d1388ca18c64fea38e3e57e3706b"
@@ -4025,6 +4030,11 @@ use-callback-ref@^1.3.0:
   integrity sha512-elOQwe6Q8gqZgDA8mrh44qRTQqpIHDcZ3hXTLjBe1i4ph8XpNJnO+aQf3NaG+lriLopI4HMx9VjQLfPQ6vhnoA==
   dependencies:
     tslib "^2.0.0"
+
+use-router-with-events@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/use-router-with-events/-/use-router-with-events-0.1.3.tgz#993664dbca795e593d449754998f1f69ffda8cd2"
+  integrity sha512-spu66fqqB8SRxcbgRc9IGwAHFT7e/xb6Sd37a1O+2haAEyLqBzNXKGfP1sGrRMBrXQRL9UNAqTsn38L69BroTA==
 
 use-sidecar@^1.1.2:
   version "1.1.2"

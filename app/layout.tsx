@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "~/src/apps/providers";
 import { Toaster } from "~/src/portal/toast-client";
 import { Logger } from "~/src/logger/example";
+import { OverlayProvider } from "./overlay-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
-            <div className=" bg-white min-w-[420px]">{children}</div>
-          </div>
+          <OverlayProvider>
+            <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
+              <div className=" bg-white min-w-[420px]">{children}</div>
+            </div>
+          </OverlayProvider>
           <Logger />
         </Providers>
         <Toaster />
