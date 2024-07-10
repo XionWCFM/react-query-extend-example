@@ -43,6 +43,33 @@ const Dialog = {
 };
 
 export default function Page() {
+  const handleClick = async () => {
+    const agreed = await new Promise((res) => {
+      const handleAgreed = () => {
+        res(true);
+        close();
+      };
+      const handleRejected = () => {
+        res(false);
+        close();
+      };
+      return overlay.open(({ isOpen, close }) => {
+        return (
+          <Dialog.Root open={isOpen} onOpenChange={close}>
+            <Dialog.Content>
+              <button onClick={handleAgreed}>동의하기</button>
+              <button onClick={handleRejected}>거절하기</button>
+            </Dialog.Content>
+          </Dialog.Root>
+        );
+      });
+    });
+    if (agreed) {
+      alert("agreed event");
+    } else {
+      alert("disagreed event");
+    }
+  };
   return (
     <div>
       <button
@@ -61,43 +88,7 @@ export default function Page() {
         button
       </button>
 
-      <button
-        onClick={async () => {
-          const agreed = await new Promise((res) =>
-            overlay.open(({ isOpen, close }) => {
-              return (
-                <Dialog.Root open={isOpen} onOpenChange={close}>
-                  <Dialog.Content>
-                    <button
-                      onClick={() => {
-                        res(true);
-                        close();
-                      }}
-                    >
-                      동의하기
-                    </button>
-                    <button
-                      onClick={() => {
-                        res(false);
-                        close();
-                      }}
-                    >
-                      거절하기
-                    </button>
-                  </Dialog.Content>
-                </Dialog.Root>
-              );
-            }),
-          );
-          if (agreed) {
-            alert("agreed event");
-          } else {
-            alert("disagreed event");
-          }
-        }}
-      >
-        async button
-      </button>
+      <button onClick={handleClick}>async button</button>
     </div>
   );
 }
