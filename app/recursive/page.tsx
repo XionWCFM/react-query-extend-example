@@ -36,7 +36,7 @@ const CheckListItem: React.FC<{ item: RecursiveCheckList; toggle: (id: Recursive
 };
 
 const CheckList: React.FC = () => {
-  const { list, checkAll, uncheckAll, toggleAll, toggle, isAllChecked, getCheckedIds } =
+  const { list, checkAll, uncheckAll, toggleAll, toggle, isAllChecked, getCheckedIds, isChecked } =
     useRecursiveCheckList(initialList);
 
   return (
@@ -46,6 +46,7 @@ const CheckList: React.FC = () => {
       <button onClick={toggleAll}>toggle All</button>
       <button onClick={() => toggle(1)}>Toggle Item 1</button>
       <button onClick={() => toggle(3)}>Toggle Item 3</button>
+      <div className="">is Checked id: 1{isChecked(1) ? "true" : "false"}</div>
       <div>All checked: {isAllChecked() ? "Yes" : "No"}</div>
       <div>Checked IDs: {getCheckedIds().join(", ")}</div>
       <div>

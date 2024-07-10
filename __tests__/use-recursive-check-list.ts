@@ -20,42 +20,51 @@ type Action<T extends RecursiveCheckList> =
       type: "UNCHECK_ALL";
     };
 
+// 체크리스트 업데이트 함수
+const updateParentCheckState = <T extends RecursiveCheckList>(item: T): T => {
+  if (!item.children) return item;
+
+  const allChecked = item.children.every((child) => child.checked);
+  return {
+    ...item,
+    checked: allChecked,
+    children: item.children.map(updateParentCheckState),
+  };
+};
+
+const updateChildCheckState = <T extends RecursiveCheckList>(item: T, checked: boolean): T => {
+  return {
+    ...item,
+    checked,
+    children: item.children ? item.children.map((child) => updateChildCheckState(child, checked)) : item.children,
+  };
+};
+
 // 재귀적으로 체크리스트를 관리하는 함수
 export const computeCheckList = <T extends RecursiveCheckList>(itemList: T[], action: Action<T>): T[] => {
   switch (action.type) {
     case "TOGGLE_CHECK":
-      return itemList.map((item) => ({
-        ...item,
-        checked: item.id === action.target ? !item.checked : item.checked,
-        children: item.children ? computeCheckList(item.children, action) : item.children,
-      }));
+      return itemList
+        .map((item) => {
+          if (item.id === action.target) {
+            const newChecked = !item.checked;
+            return updateParentCheckState(updateChildCheckState(item, newChecked));
+          } else if (item.children) {
+            return {
+              ...item,
+              children: computeCheckList(item.children, action),
+            };
+          }
+          return item;
+        })
+        .map(updateParentCheckState);
     case "CHECK_ALL":
-      return itemList.map((item) => ({
-        ...item,
-        checked: true,
-        children: item.children ? computeCheckList(item.children, action) : item.children,
-      }));
+      return itemList.map((item) => updateChildCheckState(item, true));
     case "UNCHECK_ALL":
-      return itemList.map((item) => ({
-        ...item,
-        checked: false,
-        children: item.children ? computeCheckList(item.children, action) : item.children,
-      }));
+      return itemList.map((item) => updateChildCheckState(item, false));
     default:
       return itemList;
   }
-};
-
-// 재귀적으로 아이템을 찾는 함수
-const _findItem = <T extends RecursiveCheckList>(itemList: T[], findItem: T["id"]): T | null => {
-  for (const item of itemList) {
-    if (item.id === findItem) return item;
-    if (item.children) {
-      const found = _findItem(item.children, findItem);
-      if (found) return found as T | null;
-    }
-  }
-  return null;
 };
 
 // 체크리스트 훅 타입 정의
