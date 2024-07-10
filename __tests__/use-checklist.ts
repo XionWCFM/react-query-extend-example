@@ -1,8 +1,8 @@
 import { useCallback, useReducer } from "react";
 
-type DefaultCheckList = { id: number | string; checked: boolean };
+type BaseCheckBox = { id: number | string; checked: boolean };
 
-type Action<T extends DefaultCheckList> =
+type Action<T extends BaseCheckBox> =
   | {
       type: "TOGGLE_CHECK";
       target: T["id"];
@@ -19,7 +19,7 @@ type Action<T extends DefaultCheckList> =
       callback: (arg: T) => boolean;
     };
 
-export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], action: Action<T>) => {
+export const checkBoxReducer = <T extends BaseCheckBox>(itemList: T[], action: Action<T>) => {
   switch (action.type) {
     case "TOGGLE_CHECK":
       return itemList.map((item) => (item.id === action.target ? { ...item, checked: !item.checked } : item));
@@ -34,16 +34,16 @@ export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], acti
   }
 };
 
-const _findItem = <T extends DefaultCheckList>(itemList: T[], findItem: T["id"]) => {
+const _findItem = <T extends BaseCheckBox>(itemList: T[], findItem: T["id"]) => {
   return itemList.find((item) => item.id === findItem) ?? null;
 };
 
-const _findIndex = <T extends DefaultCheckList>(itemList: T[], findItem: T["id"]) => {
+const _findIndex = <T extends BaseCheckBox>(itemList: T[], findItem: T["id"]) => {
   const result = itemList.findIndex((item) => item.id === findItem);
   return result !== -1 ? result : null;
 };
 
-type CheckListReturnType<T extends DefaultCheckList> = {
+type CheckListReturnType<T extends BaseCheckBox> = {
   list: T[];
   dispatch: (action: Action<T>) => void;
   isChecked: (id: T["id"]) => boolean;
@@ -69,8 +69,8 @@ type CheckListReturnType<T extends DefaultCheckList> = {
  * @param {T[]} list - The initial list of items.
  * @returns {CheckListReturnType<T>} The checklist state and actions to manipulate it.
  */
-export const useCheckList = <T extends DefaultCheckList>(list: T[]): CheckListReturnType<T> => {
-  const [state, dispatch] = useReducer(computeCheckList<T>, list);
+export const useCheckList = <T extends BaseCheckBox>(list: T[]): CheckListReturnType<T> => {
+  const [state, dispatch] = useReducer(checkBoxReducer<T>, list);
 
   const findItem = useCallback((id: T["id"]) => _findItem<T>(state, id), [state]);
 

@@ -73,11 +73,7 @@ export default function Page() {
       {/* 옵셔널 선택 렌더링하기 */}
       <div className=" mt-8 flex gap-x-4">
         <div className=""> 선택 내용 모두 동의하기</div>
-        <CheckBox
-          id="선택모두동의"
-          checked={check.isCheckedBy(({ group }) => group === "optional")}
-          onChange={() => handleChange("optional")}
-        />
+        <CheckBox id="선택모두동의" checked={isOptionalChecked} onChange={() => handleChange("optional")} />
       </div>
 
       <div className=" mt-4 flex flex-col gap-y-4">

@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { computeCheckList, useCheckList } from "./use-checklist";
+import { checkBoxReducer, useCheckList } from "./use-checklist";
 
 describe("computeCheckList 테스트", () => {
   type TestItem = { id: number | string; checked: boolean };
@@ -12,7 +12,7 @@ describe("computeCheckList 테스트", () => {
     ];
     const action = { type: "TOGGLE_CHECK" as const, target: 2 };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual([
       { id: 1, checked: false },
       { id: 2, checked: false },
@@ -28,7 +28,7 @@ describe("computeCheckList 테스트", () => {
     ];
     const action = { type: "TOGGLE_CHECK" as const, target: 4 };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual(itemList);
   });
 
@@ -40,7 +40,7 @@ describe("computeCheckList 테스트", () => {
     ];
     const action = { type: "CHECK_ALL" as const };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual([
       { id: 1, checked: true },
       { id: 2, checked: true },
@@ -56,7 +56,7 @@ describe("computeCheckList 테스트", () => {
     ];
     const action = { type: "UNCHECK_ALL" as const };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual([
       { id: 1, checked: false },
       { id: 2, checked: false },
@@ -72,7 +72,7 @@ describe("computeCheckList 테스트", () => {
     ];
     const action = { type: "INVALID_ACTION" as any };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual(itemList);
   });
 
@@ -80,7 +80,7 @@ describe("computeCheckList 테스트", () => {
     const itemList: TestItem[] = [];
     const action = { type: "CHECK_ALL" as const };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual([]);
   });
 
@@ -88,7 +88,7 @@ describe("computeCheckList 테스트", () => {
     const itemList: TestItem[] = [];
     const action = { type: "UNCHECK_ALL" as const };
 
-    const result = computeCheckList(itemList, action);
+    const result = checkBoxReducer(itemList, action);
     expect(result).toEqual([]);
   });
 });
