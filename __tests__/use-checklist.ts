@@ -12,6 +12,11 @@ type Action<T extends DefaultCheckList> =
     }
   | {
       type: "UNCHECK_ALL";
+    }
+  | {
+      type: "CHECK_BY";
+      checked: boolean;
+      callback: (arg: T) => void;
     };
 
 export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], action: Action<T>) => {
@@ -22,6 +27,8 @@ export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], acti
       return itemList.map((item) => ({ ...item, checked: true }));
     case "UNCHECK_ALL":
       return itemList.map((item) => ({ ...item, checked: false }));
+    case "CHECK_BY":
+      return itemList.map((item) => ({ ...item, checked: action.callback(item) }));
     default:
       return itemList;
   }
@@ -51,6 +58,7 @@ type CheckListReturnType<T extends DefaultCheckList> = {
   updateAll: (checked: boolean) => void;
   toggleAll: () => void;
   updateItem: (id: T["id"], checked: boolean) => void;
+  checkBy: (toggle: boolean, fn: (arg: T) => void) => void;
 };
 
 /**
@@ -139,6 +147,11 @@ export const useCheckList = <T extends DefaultCheckList>(list: T[]): CheckListRe
     () => (isAllChecked() ? uncheckAll() : checkAll()),
     [isAllChecked, checkAll, uncheckAll],
   );
+
+  const checkBy = useCallback((toggle: boolean, fn: (arg: T) => void) => {
+    dispatch({ type: "CHECK_BY", checked: toggle, callback: fn });
+  }, []);
+
   return {
     list: state,
     dispatch,
@@ -153,5 +166,6 @@ export const useCheckList = <T extends DefaultCheckList>(list: T[]): CheckListRe
     getCheckedList,
     updateAll,
     toggleAll,
+    checkBy,
   } as CheckListReturnType<T>;
 };
