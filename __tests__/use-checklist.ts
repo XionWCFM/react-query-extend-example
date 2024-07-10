@@ -16,7 +16,7 @@ type Action<T extends DefaultCheckList> =
   | {
       type: "CHECK_BY";
       checked: boolean;
-      callback: (arg: T) => void;
+      callback: (arg: T) => boolean;
     };
 
 export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], action: Action<T>) => {
@@ -28,7 +28,7 @@ export const computeCheckList = <T extends DefaultCheckList>(itemList: T[], acti
     case "UNCHECK_ALL":
       return itemList.map((item) => ({ ...item, checked: false }));
     case "CHECK_BY":
-      return itemList.map((item) => ({ ...item, checked: action.callback(item) }));
+      return itemList.map((item) => ({ ...item, checked: action.callback(item) ? action.checked : item.checked }));
     default:
       return itemList;
   }
@@ -58,7 +58,8 @@ type CheckListReturnType<T extends DefaultCheckList> = {
   updateAll: (checked: boolean) => void;
   toggleAll: () => void;
   updateItem: (id: T["id"], checked: boolean) => void;
-  checkBy: (toggle: boolean, fn: (arg: T) => void) => void;
+  checkBy: (toggle: boolean, fn: (arg: T) => boolean) => void;
+  isCheckedBy: (fn: (arg: T) => boolean) => boolean;
 };
 
 /**
@@ -71,84 +72,39 @@ type CheckListReturnType<T extends DefaultCheckList> = {
 export const useCheckList = <T extends DefaultCheckList>(list: T[]): CheckListReturnType<T> => {
   const [state, dispatch] = useReducer(computeCheckList<T>, list);
 
-  /**
-   * Finds an item in the checklist by its id.
-   *
-   * @param {T["id"]} id - The id of the item to find.
-   * @returns {T | null} The item if found, otherwise null.
-   */
   const findItem = useCallback((id: T["id"]) => _findItem<T>(state, id), [state]);
 
-  /**
-   * Finds the index of an item in the checklist by its id.
-   *
-   * @param {T["id"]} id - The id of the item to find.
-   * @returns {number | null} The index of the item if found, otherwise null.
-   */
   const findIndex = useCallback((id: T["id"]) => _findIndex(state, id), [state]);
 
-  /**
-   * Checks if an item is checked.
-   *
-   * @param {T["id"]} id - The id of the item to check.
-   * @returns {boolean} True if the item is checked, otherwise false.
-   */
   const isChecked = useCallback((id: T["id"]) => findItem(id)?.checked || false, [findItem]);
 
-  /**
-   * Checks all items in the checklist.
-   */
   const checkAll = useCallback(() => dispatch({ type: "CHECK_ALL" }), []);
 
-  /**
-   * Unchecks all items in the checklist.
-   */
   const uncheckAll = useCallback(() => dispatch({ type: "UNCHECK_ALL" }), []);
 
-  /**
-   * Toggles the checked state of an item.
-   *
-   * @param {T["id"]} id - The id of the item to toggle. 토글할 아이템의 id.
-   */
   const toggle = useCallback((id: T["id"]) => dispatch({ type: "TOGGLE_CHECK", target: id }), []);
 
-  /**
-   * Checks if all items in the checklist are checked.
-   *
-   * @returns {boolean} True if all items are checked, otherwise false.
-   */
   const isAllChecked = useCallback(() => state.every((item) => item.checked), [state]);
 
-  /**
-   * Returns the ids of all checked items.
-   *
-   * @returns {T["id"][]} An array of ids of all checked items.
-   */
   const getCheckedIds = useCallback(() => state.filter((item) => item.checked).map((item) => item.id), [state]);
 
-  /**
-   * Returns all checked items.
-   *
-   * @returns {T[]} An array of all checked items.
-   */
   const getCheckedList = useCallback(() => state.filter((item) => item.checked), [state]);
 
-  /**
-   * Updates the checked state of all items.
-   *
-   * @param {boolean} checked - The new checked state.
-   */
   const updateAll = useCallback((checked: boolean) => (checked ? checkAll() : uncheckAll()), [checkAll, uncheckAll]);
 
-  /**
-   * Toggles the checked state of all items.
-   */
   const toggleAll = useCallback(
     () => (isAllChecked() ? uncheckAll() : checkAll()),
     [isAllChecked, checkAll, uncheckAll],
   );
 
-  const checkBy = useCallback((toggle: boolean, fn: (arg: T) => void) => {
+  const isCheckedBy = useCallback(
+    (fn: (arg: T) => void) => {
+      return state.filter((item) => fn(item)).every((item) => item.checked);
+    },
+    [state],
+  );
+
+  const checkBy = useCallback((toggle: boolean, fn: (arg: T) => boolean) => {
     dispatch({ type: "CHECK_BY", checked: toggle, callback: fn });
   }, []);
 
@@ -167,5 +123,6 @@ export const useCheckList = <T extends DefaultCheckList>(list: T[]): CheckListRe
     updateAll,
     toggleAll,
     checkBy,
-  } as CheckListReturnType<T>;
+    isCheckedBy,
+  } as unknown as CheckListReturnType<T>;
 };
