@@ -1,5 +1,5 @@
 "use client";
-import { Children, isValidElement, useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { Children, isValidElement, useCallback, useMemo, useState } from "react";
 
 type NonEmptyArray<T> = readonly [T, ...T[]];
 
@@ -95,37 +95,46 @@ export const useFlow = <T extends NonEmptyArray<string>>(stepList: T, options?: 
   const stackCount = state.stackCount;
   const historyStack = state.historyStack;
 
-  const sync = () => {
+  const sync = useCallback(() => {
     setState((prevState) =>
       prevState.currentStep === flow.currentStep && prevState.stackCount === flow.stackCount
         ? prevState
         : { currentStep: flow.currentStep, stackCount: flow.stackCount, historyStack: flow.historyStack },
     );
-  };
+  }, [flow.currentStep, flow.historyStack, flow.stackCount]);
 
   const clear = useCallback(() => {
     flow.clear();
     sync();
-  }, []);
-  const nextStep = useCallback((step: T[number]) => {
-    flow.nextStep(step);
-    sync();
-  }, []);
-  const back = useCallback((num?: number) => {
-    flow.back(num);
-    sync();
-  }, []);
-  const filteredStep = useCallback((stepList: T[number][]) => {
-    flow.filteredStep(stepList);
-    sync();
-  }, []);
+  }, [flow, sync]);
+  const nextStep = useCallback(
+    (step: T[number]) => {
+      flow.nextStep(step);
+      sync();
+    },
+    [flow, sync],
+  );
+  const back = useCallback(
+    (num?: number) => {
+      flow.back(num);
+      sync();
+    },
+    [flow, sync],
+  );
+  const filteredStep = useCallback(
+    (stepList: T[number][]) => {
+      flow.filteredStep(stepList);
+      sync();
+    },
+    [flow, sync],
+  );
 
   const FunnelComponent = useMemo(() => {
     return Object.assign(
       (props: RouteFunnelProps<T>) => <Funnel<T> step={flow.currentStep} steps={flow.stepList} {...props} />,
       { Step: (props: StepProps<T>) => <Step {...props} /> },
     );
-  }, [flow.currentStep]);
+  }, [flow.currentStep, flow.stepList]);
 
   const externalFlow = {
     stepList,

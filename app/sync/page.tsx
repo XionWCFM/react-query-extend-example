@@ -1,18 +1,30 @@
 "use client";
 
 import { memo, useCallback, useEffect, useRef } from "react";
-import { useFlow } from "./flow";
+import useRouterWithEvents from "use-router-with-events";
+import useBeforeUnload from "./use-before-unload";
+import { overlay } from "overlay-kit";
+import { useFlow } from "./use-flow";
 
 const Page = () => {
   const [Funnel, flow] = useFlow(["hello", "world", "mot"] as const);
-  const handle = useCallback(() => {
-    confirm("hello");
-  }, []);
-
+  useBeforeUnload(async () => {
+    const result = await new Promise<boolean>((res) =>
+      overlay.open(() => {
+        return (
+          <div className="">
+            <button onClick={() => res(true)}>나가기</button>
+            <button onClick={() => res(false)}>그대로있기</button>
+          </div>
+        );
+      }),
+    );
+    return false;
+  });
   return (
     <div>
       <div className="">{flow.stepList}</div>
-      <div className="">{flow.currentStep}</div>
+      <div className="">{flow.step}</div>
       <div className="">{flow.historyStack.join(" -> ")}</div>
       <div className="">{flow.stackCount}</div>
       <Funnel>
@@ -42,24 +54,13 @@ const Page = () => {
       <div className=" mt-60"></div>
       <button
         onClick={() => {
-          flow.nextStep("mot");
-          flow.filteredStep(["hello"]);
+          flow.removeStep("hello");
         }}
       >
         없애기 hello 스택
       </button>
-      <Component handleClick={flow.nextStep} />
     </div>
   );
 };
 
 export default Page;
-
-type Props = {
-  handleClick: (hi: any) => void;
-};
-const Component = memo((props: Props) => {
-  const { handleClick } = props;
-
-  return <div>is Rerender?</div>;
-});
