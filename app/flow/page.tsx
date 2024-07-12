@@ -58,7 +58,6 @@ const useFlow = <T extends NonEmptyArray<string>>(list: T, option?: FlowOption<T
     historyStack: [option?.initialStep ?? list[0]],
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  
 };
 
 export default function Home() {

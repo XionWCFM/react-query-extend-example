@@ -1,4 +1,5 @@
 import { Children, isValidElement, useCallback, useMemo, useReducer } from "react";
+import { Observable } from "~/src/hooks/observer";
 
 type NonEmptyArray<T> = readonly [T, ...T[]];
 
@@ -32,7 +33,6 @@ const Step = <Steps extends NonEmptyArray<string>>({ children }: StepProps<Steps
 type FlowStatesType<T extends NonEmptyArray<string>> = {
   stepList: T;
   step: T[number];
-  stackCount: number;
   historyStack: T[number][];
 };
 
@@ -68,7 +68,6 @@ const flowReducer = <T extends NonEmptyArray<string>>(
       return {
         ...state,
         step: state.stepList[0],
-        stackCount: 0,
         historyStack: [],
       };
     case "NEXT_STEP":
@@ -76,38 +75,35 @@ const flowReducer = <T extends NonEmptyArray<string>>(
       return {
         ...state,
         step: payload,
-        stackCount: state.stackCount + 1,
         historyStack: [...state.historyStack, state.step],
       };
     case "BACK":
       const backStepNum = payload ?? 1;
-      const stackCount = Math.max(state.stackCount - backStepNum, 0);
       return {
         ...state,
-        step: state.historyStack[stackCount],
-        stackCount,
-        historyStack: state.historyStack.slice(0, stackCount),
+        step: state.historyStack[state.historyStack.length - backStepNum] ?? state.step,
+        historyStack: state.historyStack.slice(0, state.historyStack.length - backStepNum),
       };
     case "REMOVE_STEP":
       const stepList = Array.isArray(payload) ? payload : [payload];
       const filteredHistoryStack = state.historyStack.filter((step) => !stepList.includes(step));
-      const removedCount = state.historyStack.length - filteredHistoryStack.length;
       return {
         ...state,
         step: state.step,
-        stackCount: Math.max(state.stackCount - removedCount, 0),
         historyStack: filteredHistoryStack,
       };
     default:
       throw new Error("Invalid action type");
   }
 };
+const steps = ["ahe", "he", "ed"] as const;
+
+const flow = new Observable<FlowStatesType<typeof steps>>();
 
 export const useFlow = <T extends NonEmptyArray<string>>(stepList: T, options?: FlowOptionsType<T>) => {
   const initialState = {
     stepList,
     step: options?.initialStep ?? stepList[0],
-    stackCount: 0,
     historyStack: [],
   } satisfies FlowStatesType<T>;
 
@@ -120,6 +116,8 @@ export const useFlow = <T extends NonEmptyArray<string>>(stepList: T, options?: 
     (step: T[number] | T[number][]) => dispatch({ type: "REMOVE_STEP", payload: step }),
     [],
   );
+  const getStackCount = useCallback(() => state.historyStack.length, [state.historyStack]);
+  const getPrevStep = useCallback(() => state.historyStack[state.historyStack.length - 1], [state.historyStack]);
 
   const FunnelComponent = useMemo(() => {
     return Object.assign(
@@ -128,5 +126,5 @@ export const useFlow = <T extends NonEmptyArray<string>>(stepList: T, options?: 
     );
   }, [state.step, state.stepList]);
 
-  return [FunnelComponent, { ...state, nextStep, back, clear, removeStep }] as const;
+  return [FunnelComponent, { ...state, nextStep, back, clear, removeStep, getStackCount, getPrevStep }] as const;
 };
