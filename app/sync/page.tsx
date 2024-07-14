@@ -26,7 +26,6 @@ const Page = () => {
       <div className="">{flow.stepList}</div>
       <div className="">{flow.step}</div>
       <div className="">{flow.historyStack.join(" -> ")}</div>
-      <div className="">{flow.stackCount}</div>
       <Funnel>
         <Funnel.Step name={"hello"}>
           <div className="">
