@@ -1,7 +1,7 @@
 "use client";
 import { overlay } from "overlay-kit";
-import * as DialogPrimitives from "@radix-ui/react-dialog";
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
+import * as DialogPrimitives from "@radix-ui/react-dialog";
 
 const Root = DialogPrimitives.Root;
 const Overlay = forwardRef<
@@ -76,13 +76,7 @@ export default function Page() {
       <button
         onClick={() => {
           overlay.open(({ isOpen, close }) => {
-            return (
-              <Dialog.Root open={isOpen} onOpenChange={close}>
-                <Dialog.Content>
-                  <button onClick={close}>닫기</button>
-                </Dialog.Content>
-              </Dialog.Root>
-            );
+            return <button onClick={() => close()}>button</button>;
           });
         }}
       >
