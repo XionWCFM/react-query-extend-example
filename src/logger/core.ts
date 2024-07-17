@@ -32,12 +32,32 @@ class Pubsub<EventName extends string = string> {
   }
 }
 
+const getReferer = () => {
+  if (typeof document === "undefined") {
+    return "[ SERVER ]";
+  }
+  return document.referrer;
+};
+
+const getUserAgent = () => {
+  if (typeof navigator === "undefined") {
+    return "[ SERVER ]";
+  }
+  return navigator.userAgent;
+};
+
+const getEnvironment = () => {
+  return process.env.NODE_ENV ?? "[ NO_ENVIRONMENT ]";
+};
+
 export const createLogger = <EventName extends string, EventProperty extends DynamicObject = DynamicObject>(
   option?: CreateLoggerParams,
 ) => {
   const eventType = option?.pubsubEventName ?? ("xionwcfm_logger_logging_event_publish" as const);
   type EventType = typeof eventType;
-  type EventParam = { eventName: EventName; eventProperty: EventProperty };
+  type EventContext = { time: string; environment: string; referer: string; userAgent: string };
+  type EventParam = { eventName: EventName; eventProperty: EventProperty; eventContext: EventContext };
+
   const pubsub = option?.pubsub ?? new Pubsub<EventType>();
 
   const subscribe = (handler: (event: EventParam) => void) => {
@@ -47,8 +67,16 @@ export const createLogger = <EventName extends string, EventProperty extends Dyn
   const unsubscribe = (handler: (event: EventParam) => void) => {
     return pubsub.unsubscribe(eventType, handler);
   };
+
   const track = async (eventName: EventName, property?: EventProperty) => {
-    const event: EventParam = { eventName, eventProperty: (property ?? {}) as EventProperty };
+    const eventProperty = (property ?? {}) as EventProperty;
+    const eventContext: EventContext = {
+      time: new Date().toISOString(),
+      environment: getEnvironment(),
+      referer: getReferer(),
+      userAgent: getUserAgent(),
+    };
+    const event: EventParam = { eventName, eventProperty, eventContext };
     return pubsub.publish<EventParam>(eventType, event);
   };
 

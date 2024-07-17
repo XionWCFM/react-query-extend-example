@@ -24,6 +24,7 @@
     "overlay-kit": "^1.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "source-map": "^0.7.4",
     "use-router-with-events": "^0.1.3"
   },
   "devDependencies": {

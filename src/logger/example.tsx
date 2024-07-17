@@ -10,7 +10,9 @@ export const Logger = () => {
     <ReactLogger
       logger={logger}
       handler={(event) => {
-        console.log(event);
+        console.group("🔥 [ LOGGING EVENT ] 🔥");
+        console.dir(event);
+        console.groupEnd();
       }}
     />
   );
