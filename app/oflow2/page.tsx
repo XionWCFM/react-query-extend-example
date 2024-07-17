@@ -7,36 +7,13 @@ const steps = ["step1", "step2", "step3"] as const;
 const flow = new Flow(steps);
 
 import * as DialogPrimitives from "@radix-ui/react-dialog";
-import { overlay } from "overlay-kit";
 
 export default function Page() {
   const [Funnel] = useFlow(flow);
-  useNavigationGuard(async () => {
-    return new Promise((res) =>
-      overlay.open(({ isOpen, close }) => (
-        <Dialog.Root>
-          <Dialog.Content>
-            <button
-              onClick={() => {
-                close();
-                res(true);
-              }}
-            >
-              떠날건가요?
-            </button>
-            <button
-              onClick={() => {
-                close();
-                res(false);
-              }}
-            >
-              안떠날건가요?
-            </button>
-          </Dialog.Content>
-        </Dialog.Root>
-      )),
-    );
-  });
+  const router = useRouter();
+  useEffect(() => {
+    window.addEventListener("popstate", (event) => {});
+  }, []);
   return (
     <div>
       <div className=" flex gap-x-4">
@@ -45,6 +22,7 @@ export default function Page() {
             key={step}
             onClick={() => {
               flow.pushStep(step);
+              router.push("/oflow2?step=1");
             }}
           >
             push {step}

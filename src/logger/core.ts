@@ -69,6 +69,7 @@ export const createLogger = <EventName extends string, EventProperty extends Dyn
   };
 
   const track = async (eventName: EventName, property?: EventProperty) => {
+    
     const eventProperty = (property ?? {}) as EventProperty;
     const eventContext: EventContext = {
       time: new Date().toISOString(),
@@ -76,6 +77,7 @@ export const createLogger = <EventName extends string, EventProperty extends Dyn
       referer: getReferer(),
       userAgent: getUserAgent(),
     };
+
     const event: EventParam = { eventName, eventProperty, eventContext };
     return pubsub.publish<EventParam>(eventType, event);
   };
