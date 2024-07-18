@@ -6,8 +6,8 @@ import { PropsWithChildren, Suspense } from "react";
 import { batchRequestsOf } from "~/src/packages/batch-request-of";
 import { type DefaultError, type UseMutationOptions, type UseMutationResult } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { Mutation } from "~/src/component/mutation";
-import { SuspenseQuery } from "~/src/component/suspense-query";
+import { Mutation } from "~/src/react-query/mutation";
+import { SuspenseQuery } from "~/src/react-query/suspense-query";
 
 const mutationFn = once(async () => {
   await new Promise((res) => setTimeout(res, 5000));
