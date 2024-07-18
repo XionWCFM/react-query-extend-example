@@ -1,20 +1,25 @@
 "use client";
+
 import { Children, isValidElement, useEffect, useMemo, useState } from "react";
+import { usePreservedReference } from "./use-preserved-reference";
 
 type Observer<T> = (data: T) => void;
 
 class Observable<T> {
   private observers: Observer<T>[] = [];
 
-  addObserver(observer: Observer<T>): void {
+  subscribe(observer: Observer<T>): () => void {
     this.observers.push(observer);
+    return () => {
+      this.unsubscribe(observer);
+    };
   }
 
-  removeObserver(observer: Observer<T>): void {
+  unsubscribe(observer: Observer<T>): void {
     this.observers = this.observers.filter((obs) => obs !== observer);
   }
 
-  notifyObservers(data: T): void {
+  notify(data: T): void {
     this.observers.forEach((observer) => observer(data));
   }
 }
@@ -50,6 +55,9 @@ const Step = <Steps extends NonEmptyArray<string>>({ children }: StepProps<Steps
 
 type FlowOptions<T extends NonEmptyArray<string>> = {
   initialStep?: T[number];
+  plugin?: FlowPlugin<T>[];
+  externalState?: FlowStateType<T>;
+  externalSetter?: (snapshot: FlowStateType<T>) => void;
 };
 
 type FlowStateType<T extends NonEmptyArray<string>> = {
@@ -80,62 +88,105 @@ type Action<T extends NonEmptyArray<string>> =
       payload: T[number];
     };
 
+type FlowPlugin<T extends NonEmptyArray<string>> =
+  | {
+      type: "storage";
+      save(state: FlowStateType<T>): void;
+      load(): FlowStateType<T> | null;
+    }
+  | {
+      type: "navigation";
+      onNavigate: (prevState: FlowStateType<T>, newState: FlowStateType<T>) => void;
+    };
+
 export class Flow<T extends NonEmptyArray<string>> extends Observable<FlowStateType<T>> {
   stepList: T;
   step: T[number];
   historyStack: T[number][];
+  private pluginList?: FlowPlugin<T>[];
 
-  constructor(stepListOrFlow: T, options?: FlowOptions<T>) {
+  constructor(stepList: T, options?: FlowOptions<T>) {
     super();
-    this.stepList = stepListOrFlow as T;
-    this.step = options?.initialStep ?? stepListOrFlow[0];
+    this.stepList = stepList;
+    this.step = options?.initialStep ?? stepList[0];
     this.historyStack = [];
+    this.pluginList = options?.plugin ?? [];
+
+    if (typeof window !== "undefined") {
+      this.pluginList.forEach((plugin) => {
+        if (plugin.type === "storage") {
+          const savedState = plugin.load();
+          if (savedState) {
+            this.dispatch(savedState);
+          }
+        }
+      });
+    }
   }
 
-  clear() {
+  clear = () => {
     this.dispatch({
       step: this.stepList[0],
       historyStack: [],
     });
-  }
+  };
 
-  pushStep(step: T[number]) {
+  pushStep = (step: T[number]) => {
     this.dispatch(this.reducer(this.getSnapshot(), { type: "NEXT_STEP", payload: step }));
-  }
+  };
 
-  back(num?: number) {
+  back = (num?: number) => {
     this.dispatch(this.reducer(this.getSnapshot(), { type: "BACK", payload: num }));
-  }
+  };
 
-  replaceStep(step: T[number]) {
+  replaceStep = (step: T[number]) => {
     this.dispatch(this.reducer(this.getSnapshot(), { type: "REPLACE_STEP", payload: step }));
-  }
+  };
 
-  filteredStep(stepList: T[number][]) {
+  filteredStep = (stepList: T[number][]) => {
     this.dispatch(this.reducer(this.getSnapshot(), { type: "REMOVE_STEP", payload: stepList }));
-  }
+  };
 
-  getPrevStep(): T[number] | undefined {
+  nextStep = () => {
+    const nextIndex = this.stepList.findIndex((item) => item === this.step) + 1;
+    if (nextIndex < this.stepList.length) {
+      this.pushStep(this.stepList[nextIndex]);
+    }
+  };
+
+  getPrevStep = (): T[number] | undefined => {
     return this.historyStack[this.historyStack.length - 1];
-  }
+  };
 
-  getStackCount(): number {
+  getStackCount = (): number => {
     return this.historyStack.length;
-  }
+  };
 
-  getSnapshot(): FlowStateType<T> {
+  getSnapshot = (): FlowStateType<T> => {
     return {
       stepList: this.stepList,
       step: this.step,
       historyStack: this.historyStack,
     };
-  }
+  };
 
   private dispatch(newState: Partial<FlowStateType<T>>) {
+    const prevState = this.getSnapshot();
     this.stepList = newState.stepList ?? this.stepList;
     this.step = newState.step ?? this.step;
     this.historyStack = newState.historyStack ?? this.historyStack;
-    this.notifyObservers(this.getSnapshot());
+    this.notify(this.getSnapshot());
+
+    if (typeof window !== "undefined") {
+      this.pluginList?.forEach((plugin) => {
+        if (plugin.type === "storage") {
+          plugin.save(this.getSnapshot());
+        }
+        if (plugin.type === "navigation") {
+          plugin.onNavigate(prevState, this.getSnapshot());
+        }
+      });
+    }
   }
 
   private reducer(state: FlowStateType<T>, action: Action<T>): FlowStateType<T> {
@@ -193,7 +244,47 @@ export class Flow<T extends NonEmptyArray<string>> extends Observable<FlowStateT
         throw new Error("Invalid action type");
     }
   }
+
+  static createLocalStoragePlugin = <T extends NonEmptyArray<string>>(key: string): FlowPlugin<T> => {
+    return {
+      type: "storage",
+      save(state: FlowStateType<T>) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem(key, JSON.stringify(state));
+        }
+      },
+      load() {
+        if (typeof window !== "undefined") {
+          const savedState = localStorage.getItem(key);
+          if (savedState) {
+            try {
+              return JSON.parse(savedState) as FlowStateType<T>;
+            } catch (error) {
+              console.error("Failed to parse flow state from local storage:", error);
+            }
+          }
+        }
+        return null;
+      },
+    };
+  };
+
+  static createNavigationPlugin = <T extends NonEmptyArray<string>>(): FlowPlugin<T> => {
+    return {
+      type: "navigation",
+      onNavigate(prevState, newState) {
+        if (typeof window === "undefined") return;
+        const stackCount = newState.historyStack.length;
+        if (stackCount > prevState.historyStack.length) {
+          window.history.pushState({ stackCount }, "", "");
+        } else if (stackCount < prevState.historyStack.length) {
+          window.history.replaceState({ stackCount }, "", "");
+        }
+      },
+    };
+  };
 }
+
 type FlowReturnType<T extends NonEmptyArray<string>> = ((props: RouteFunnelProps<T>) => JSX.Element) & {
   Step: (props: StepProps<T>) => JSX.Element;
 };
@@ -208,12 +299,12 @@ export function useFlow<T extends NonEmptyArray<string>>(
   ...args: Parameters<UseFlowStructureType<T>>
 ): FlowTupleReturnType<T> {
   const [flowOrList, options] = args;
-  const [flow] = useState(() => (flowOrList instanceof Flow ? flowOrList : new Flow(flowOrList, options)));
+  const flow = usePreservedReference(flowOrList instanceof Flow ? flowOrList : new Flow(flowOrList, options));
   const [state, setState] = useState<FlowStateType<T>>(() => flow.getSnapshot());
   useEffect(() => {
-    flow.addObserver(setState);
+    flow.subscribe(setState);
     return () => {
-      flow.removeObserver(setState);
+      flow.unsubscribe(setState);
     };
   }, [flow]);
 

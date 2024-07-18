@@ -4,16 +4,16 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef, useCallback, useEffec
 import { Flow, useFlow } from "~/src/hooks/observer-flow";
 
 const steps = ["step1", "step2", "step3"] as const;
-const flow = new Flow(steps);
+const flow = new Flow(steps, {
+  plugin: [],
+});
 
 import * as DialogPrimitives from "@radix-ui/react-dialog";
 
 export default function Page() {
   const [Funnel] = useFlow(flow);
   const router = useRouter();
-  useEffect(() => {
-    window.addEventListener("popstate", (event) => {});
-  }, []);
+
   return (
     <div>
       <div className=" flex gap-x-4">
