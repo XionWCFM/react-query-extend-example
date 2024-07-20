@@ -1,9 +1,14 @@
 "use client";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
+const exampleAtom = atom("example");
+
 export default function Page() {
   const [notWorkingText, setNotWorkingText] = useState("world");
+  const setter = useSetAtom(exampleAtom);
+
   return (
     <div className=" flex flex-col">
       <button
@@ -26,6 +31,7 @@ export default function Page() {
       >
         not work example button
       </button>
+
       <button
         onClick={() => {
           overlay.open(({ isOpen, close }) => {
@@ -48,6 +54,22 @@ export default function Page() {
         }}
       >
         work example
+      </button>
+      <button
+        onClick={() => {
+          overlay.open(({ isOpen }) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const value = useAtomValue(exampleAtom);
+            return (
+              <div>
+                <div className="">{value}</div>
+                <button onClick={() => setter("hello")}>onCLick</button>
+              </div>
+            );
+          });
+        }}
+      >
+        state
       </button>
     </div>
   );

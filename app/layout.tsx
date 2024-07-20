@@ -24,9 +24,10 @@ export default function RootLayout({
         <Providers>
           <OverlayProvider>
             <RouteChangesProvider>
-              <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
+              {/* <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
                 <div className=" bg-white min-w-[420px]">{children}</div>
-              </div>
+              </div> */}
+              {children}
             </RouteChangesProvider>
           </OverlayProvider>
           <Logger />
