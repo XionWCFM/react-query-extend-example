@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./public/workers",
+      "module": "ES6",
+      "noEmit": false,
+      "sourceMap": false,
+      "incremental": false
+    },
+    "include": [
+      "workers/**/*.ts"
+    ],
+    "exclude": [
+        "workers/types.ts"
+    ]
+}

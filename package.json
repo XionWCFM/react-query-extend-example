@@ -10,13 +10,15 @@
     "test:ci": "vitest run",
     "test:snapshot": "vitest run -u",
     "test:coverage": "vitest run --coverage.all",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:workers": "tsc -p tsconfig.worker.json"
   },
   "dependencies": {
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.1",
     "@tanstack/react-query": "^5.51.9",
+    "comlink": "^4.4.1",
     "es-toolkit": "^1.10.1",
     "jotai": "^2.9.0",
     "lodash": "^4.17.21",
