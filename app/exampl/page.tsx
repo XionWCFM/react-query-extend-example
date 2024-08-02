@@ -1,40 +1,16 @@
-"use client";
+import { MemoizedComponent, UnmemoComponent, ExampleType } from "../../src/rerender/example";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-const Dialog = (props: { open: boolean; onOpenChange: (bool: boolean) => void }) => {
-  return null;
-};
-
-const useGodHooks = () => {
-  const router = useRouter();
-  const { data } = useQuery({ queryKey: ["hello"], queryFn: async () => "hello" });
-  const mutation = useMutation({ mutationFn: async () => {} });
-  const [open, onOpenChange] = useState(false);
-
-  const handleCtaClick = async () => {
-    onOpenChange(true);
-  };
-
-  const dialogSubmit = async () => {
-    await mutation.mutateAsync();
-    router.push("/hello");
-  };
-
-  return {
-    data,
-    handleCtaClick,
-  };
-};
+const list: ExampleType[] = Array.from({ length: 200000 }).map((_, i) => ({
+  id: i.toString(),
+  content: `Hello ${i}`,
+  done: false,
+}));
 
 export default function Page() {
-  const { data, handleCtaClick } = useGodHooks();
   return (
     <div>
-      <div>{data}</div>
-      <button onClick={handleCtaClick}> 클릭</button>
+      <MemoizedComponent list={list} />
+      {/* <UnmemoComponent list={list} /> */}
     </div>
   );
 }
