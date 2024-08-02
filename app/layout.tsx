@@ -6,6 +6,7 @@ import { Toaster } from "~/src/portal/toast-client";
 import { Logger } from "~/src/logger/example";
 import { OverlayProvider } from "./overlay-provider";
 import { RouteChangesProvider } from "nextjs-router-events";
+import { PORTAL_ID } from "~/src/portal-id";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,18 +24,20 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <OverlayProvider>
-            <RouteChangesProvider>
-              {/* <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
-                <div className=" bg-white min-w-[420px]">{children}</div>
-              </div> */}
-              {children}
-            </RouteChangesProvider>
+            <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
+              <div className=" bg-white min-w-[430px]">
+                {children}
+                <div id="toast" />
+                <div id="dialog" />
+              </div>
+            </div>
+            <Logger />
+            <Toaster />
+            {Object.values(PORTAL_ID).map((id) => (
+              <div id={id} key={id} />
+            ))}
           </OverlayProvider>
-          <Logger />
         </Providers>
-        <Toaster />
-        <div id="toast" />
-        <div id="dialog" />
       </body>
     </html>
   );
