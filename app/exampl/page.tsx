@@ -1,4 +1,4 @@
-import { MemoizedComponent, UnmemoComponent, ExampleType } from "../../src/rerender/example";
+import { MemoizedComponent, UnmemoComponent, ExampleType } from "../../src/@deprecated/rerender/example";
 
 const list: ExampleType[] = Array.from({ length: 200000 }).map((_, i) => ({
   id: i.toString(),

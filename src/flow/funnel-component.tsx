@@ -1,4 +1,4 @@
-import { Children, isValidElement } from "react";
+import { Children, isValidElement, useState } from "react";
 
 export type NonEmptyArray<T> = readonly [T, ...T[]];
 
@@ -28,3 +28,4 @@ export const Funnel = <Steps extends NonEmptyArray<string>>({ step, steps, child
 export const Step = <Steps extends NonEmptyArray<string>>({ children }: StepProps<Steps>) => {
   return children;
 };
+

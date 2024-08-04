@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Dialog } from "~/src/dialog/dialog";
+import { Dialog } from "~/src/@deprecated/dialog/dialog";
 
 export default function Page() {
   const inputRef = useRef<HTMLInputElement>(null);

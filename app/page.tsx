@@ -12,7 +12,7 @@ import {
   DrawerOverlay,
   DrawerTitle,
   DrawerTrigger,
-} from "~/src/drawer/drawer";
+} from "~/src/@deprecated/drawer/drawer";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 

@@ -3,11 +3,11 @@
 import { useMutation, useIsMutating, MutationFilters, MutationOptions, queryOptions } from "@tanstack/react-query";
 import { once } from "es-toolkit";
 import { PropsWithChildren, Suspense } from "react";
-import { batchRequestsOf } from "~/src/packages/batch-request-of";
+import { batchRequestsOf } from "~/src/@deprecated/packages/batch-request-of";
 import { type DefaultError, type UseMutationOptions, type UseMutationResult } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { Mutation } from "~/src/react-query/mutation";
-import { SuspenseQuery } from "~/src/react-query/suspense-query";
+import { Mutation } from "~/src/@deprecated/react-query/mutation";
+import { SuspenseQuery } from "~/src/@deprecated/react-query/suspense-query";
 
 const mutationFn = once(async () => {
   await new Promise((res) => setTimeout(res, 5000));

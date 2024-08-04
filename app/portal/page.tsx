@@ -1,5 +1,5 @@
-import { Portal } from "~/src/portal";
-import { PORTAL_ID } from "~/src/portal-id";
+import { Portal } from "~/src/@deprecated/portal";
+import { PORTAL_ID } from "~/src/@deprecated/portal-id";
 
 export default function Page() {
   return (

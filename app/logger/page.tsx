@@ -1,6 +1,6 @@
 "use client";
 
-import { logger } from "~/src/logger/example";
+import { logger } from "~/src/@deprecated/logger/example";
 
 export default function Home() {
   const handleClick = () => {

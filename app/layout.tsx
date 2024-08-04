@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "~/src/apps/providers";
-import { Toaster } from "~/src/portal/toast-client";
-import { Logger } from "~/src/logger/example";
+import { Toaster } from "~/src/@deprecated/portal/toast-client";
+import { Logger } from "~/src/@deprecated/logger/example";
 import { OverlayProvider } from "./overlay-provider";
 import { RouteChangesProvider } from "nextjs-router-events";
-import { PORTAL_ID } from "~/src/portal-id";
+import { PORTAL_ID } from "~/src/@deprecated/portal-id";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
