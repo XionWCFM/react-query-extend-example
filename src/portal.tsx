@@ -10,4 +10,3 @@ export const Portal = ({ children, id }: PropsWithChildren & { id: string }) => 
   }, []);
   return mounted ? createPortal(children, document.getElementById(id) as HTMLElement) : null;
 };
-
