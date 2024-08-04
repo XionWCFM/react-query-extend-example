@@ -1,47 +1,69 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHandle,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerTitle,
-  DrawerTrigger,
-} from "~/src/@deprecated/drawer/drawer";
-import * as AspectRatio from "@radix-ui/react-aspect-ratio";
-import Image from "next/image";
+import { delay } from "es-toolkit";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FunnelStepChangeFunction, useFlow } from "~/src/flow/flow";
+import { getHref, updateQueryParams } from "~/src/flow/query-string";
+
+const list = ["a", "b", "c", "d", "e"] as const;
 
 export default function Home() {
-  const [open, onOpenChange] = useState(false);
+  const FUNNEL_ID = "step-1";
+  const router = useRouter();
+  const queryStep = useSearchParams().get(FUNNEL_ID);
+  const step = (queryStep ?? list[0]) as (typeof list)[number];
+
+  const [Funnel, controller] = useFlow(list, {
+    funnelId: FUNNEL_ID,
+    initialStep: list[0],
+    step: step,
+  });
+
+  const setStep: FunnelStepChangeFunction = (param, options) => {
+    const newUrl = `${getHref()}${updateQueryParams({ [FUNNEL_ID]: param })}`;
+    if (options?.type === "replace") {
+      router.replace(newUrl);
+    }
+    if (options?.type === "push") {
+      router.push(newUrl);
+    }
+    if (options?.type === "back") {
+      router.back();
+    }
+    router.push(newUrl);
+  };
+
   return (
     <div className="">
-      <AspectRatio.Root ratio={450 / 80} className=" w-[38vw]">
-        <Image className=" " fill alt="hello" src={"/banner-shop-gather.png"} />
-      </AspectRatio.Root>
+      <Funnel>
+        <Funnel.Step name={"a"}>
+          <div className="">
+            <div className="">현재 위치 A</div>
+            <button onClick={() => setStep("b")}>다음</button>
+          </div>
+        </Funnel.Step>
 
-      <Drawer open={open} onOpenChange={onOpenChange} disablePreventScroll={false}>
-        <DrawerTrigger>Open</DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <div className=" h-[400px] overflow-y-scroll">
-              <div className=" min-h-screen  bg-purple-100">
-                <button>Submit</button>
-              </div>
+        <Funnel.Step
+          name={"b"}
+          onNeedMore={() => {
+            router.replace("/?step-1=a");
+          }}
+        >
+          <Funnel.Guard condition={true} fallback={<>...check...can 넘어가기</>}>
+            <div className="">
+              <div className="">현재 위치 B</div>
+              <button onClick={() => setStep("c")}>다음</button>
             </div>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-      <div className=" h-screen"></div>
-      <div className=" h-screen"></div>
+          </Funnel.Guard>
+        </Funnel.Step>
+
+        <Funnel.Step name={"c"}>
+          <div className="">
+            <div className="">현재 위치 C</div>
+            <button onClick={() => setStep("a")}>다음</button>
+          </div>
+        </Funnel.Step>
+      </Funnel>
     </div>
   );
 }
