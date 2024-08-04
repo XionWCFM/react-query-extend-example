@@ -4,7 +4,7 @@ interface UrlParams {
   [key: string]: string | number | boolean | null | undefined;
 }
 
-export const getHref = () => {
+export const getOriginAndPathname = () => {
   if (typeof window === "undefined") return "";
   return `${window.location.origin}${window.location.pathname}`;
 };

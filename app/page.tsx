@@ -1,9 +1,8 @@
 "use client";
 
-import { delay } from "es-toolkit";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FunnelStepChangeFunction, useFlow } from "~/src/flow/flow";
-import { getHref, updateQueryParams } from "~/src/flow/query-string";
+import { getOriginAndPathname, updateQueryParams } from "~/src/flow/query-string";
 
 const list = ["a", "b", "c", "d", "e"] as const;
 
@@ -20,7 +19,7 @@ export default function Home() {
   });
 
   const setStep: FunnelStepChangeFunction = (param, options) => {
-    const newUrl = `${getHref()}${updateQueryParams({ [FUNNEL_ID]: param })}`;
+    const newUrl = `${getOriginAndPathname()}${updateQueryParams({ [FUNNEL_ID]: param })}`;
     if (options?.type === "replace") {
       router.replace(newUrl);
     }
@@ -45,7 +44,8 @@ export default function Home() {
 
         <Funnel.Step
           name={"b"}
-          onNeedMore={() => {
+          onFunnelRestrictEvent={() => {
+            console.log("work?");
             router.replace("/?step-1=a");
           }}
         >
