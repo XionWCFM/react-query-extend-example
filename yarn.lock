@@ -1250,6 +1250,21 @@
     loupe "^2.3.7"
     pretty-format "^29.7.0"
 
+"@xionhub/funnel-app-router-adapter@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-app-router-adapter/-/funnel-app-router-adapter-0.0.2.tgz#683c024718a4370eb2c92820d44deb3893a455e3"
+  integrity sha512-g8aQYJn7Fucde5krMnvrug7OC8j/uqHLmk8DaW3htTYZCuEaPjOMSQ9XC1Lu8URGgcQmkobR+zdO9XS23WOugg==
+
+"@xionhub/funnel-client@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-client/-/funnel-client-0.0.2.tgz#62120a482ba03c0ad5fb61046b3e7e780f280eea"
+  integrity sha512-4VmCEEYS44qDi+jYmv3A14JX9h/Js9gw8pu2KrjIwTyrH35lT2T9gbyB+qJicOLyKE1zu48MjMe459zLXv5eCQ==
+
+"@xionhub/funnel-core@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-core/-/funnel-core-0.0.2.tgz#95cca80cfb767476cbdeebfe0e9fd5f0a1250a76"
+  integrity sha512-KdS2/420RtTUbPH3FDKLfbddamPW4q/ZrvHXQJoyaXSpaPOt5Rpm3FfmSXQMfbPs/suYIQLhPTfUyzARyKRPdg==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
