@@ -5,7 +5,11 @@ type IsEnabeldType = (param: FeatureFlagType, context?: FeatureFlagOptionsType) 
 
 const useFeatureFlag = (): { isEnabled: IsEnabeldType } => {
   const isEnabled: IsEnabeldType = (type, options) => {
-    return true;
+    switch (type) {
+      default: {
+        return false;
+      }
+    }
   };
   return { isEnabled };
 };
