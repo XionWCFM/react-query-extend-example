@@ -1250,20 +1250,20 @@
     loupe "^2.3.7"
     pretty-format "^29.7.0"
 
-"@xionhub/funnel-app-router-adapter@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xionhub/funnel-app-router-adapter/-/funnel-app-router-adapter-0.0.2.tgz#683c024718a4370eb2c92820d44deb3893a455e3"
-  integrity sha512-g8aQYJn7Fucde5krMnvrug7OC8j/uqHLmk8DaW3htTYZCuEaPjOMSQ9XC1Lu8URGgcQmkobR+zdO9XS23WOugg==
+"@xionhub/funnel-app-router-adapter@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-app-router-adapter/-/funnel-app-router-adapter-0.0.4.tgz#9cd1d9747b077a10b2de753a769e49616ef2cc57"
+  integrity sha512-09wLXEAqgLNEbRAJNPDK8DKYyfOsLxxBw57kAv1Y/ixJ8JyqDYRyO/NrF/2SqYPeF5XbzSNtjUbfIQRtT/yClQ==
 
-"@xionhub/funnel-client@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xionhub/funnel-client/-/funnel-client-0.0.2.tgz#62120a482ba03c0ad5fb61046b3e7e780f280eea"
-  integrity sha512-4VmCEEYS44qDi+jYmv3A14JX9h/Js9gw8pu2KrjIwTyrH35lT2T9gbyB+qJicOLyKE1zu48MjMe459zLXv5eCQ==
+"@xionhub/funnel-client@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-client/-/funnel-client-0.0.4.tgz#a70d8a725285fa39791b57c70d9b5398982fd524"
+  integrity sha512-RU3ssrnISCjM/GRbCizBKIyvK8aqXYceHJS4pUxtS//8Akv6N0rzOJjBamFAcPdc5VZsWFHIph5L5kLEOlSg0Q==
 
-"@xionhub/funnel-core@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xionhub/funnel-core/-/funnel-core-0.0.2.tgz#95cca80cfb767476cbdeebfe0e9fd5f0a1250a76"
-  integrity sha512-KdS2/420RtTUbPH3FDKLfbddamPW4q/ZrvHXQJoyaXSpaPOt5Rpm3FfmSXQMfbPs/suYIQLhPTfUyzARyKRPdg==
+"@xionhub/funnel-core@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@xionhub/funnel-core/-/funnel-core-0.0.4.tgz#c01665129372e9e1629d32528ec61860174a4f99"
+  integrity sha512-n2NeDDqRol9WZ2KsmEYDem4XCAfTnDjRzRiUWLmldi9OGLUMHmHLMPZJxnkExy7UJi5dfVYvqZtBdu++z56YrA==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
