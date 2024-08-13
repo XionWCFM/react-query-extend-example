@@ -24,6 +24,6 @@
     "types": ["vitest/globals"]
   },
 
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/@deprecated/logger/core.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/@deprecated/logger/core.ts", "src/index.ts"],
   "exclude": ["node_modules"]
 }
