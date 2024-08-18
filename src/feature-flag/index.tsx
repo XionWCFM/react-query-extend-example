@@ -3,13 +3,20 @@ type FeatureFlagOptionsType = { today?: Date; userId?: string };
 
 type IsEnabeldType = (param: FeatureFlagType, context?: FeatureFlagOptionsType) => Promise<boolean> | boolean;
 
-const useFeatureFlag = (): { isEnabled: IsEnabeldType } => {
-  const isEnabled: IsEnabeldType = (type, options) => {
-    switch (type) {
-      default: {
-        return false;
-      }
+export const isEnabled: IsEnabeldType = (param, context) => {
+  switch (param) {
+    case "new-feature": {
+      return true;
     }
+    default: {
+      return false;
+    }
+  }
+};
+
+export const useFeatureFlag = (): { isEnabled: IsEnabeldType } => {
+  const isInternalEnabled: IsEnabeldType = (type, options) => {
+    return isEnabled(type, options);
   };
-  return { isEnabled };
+  return { isEnabled: isInternalEnabled };
 };
