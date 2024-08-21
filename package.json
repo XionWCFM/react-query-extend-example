@@ -19,6 +19,7 @@
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.1",
     "@tanstack/react-query": "^5.51.9",
+    "@use-funnel/browser": "^0.0.3",
     "@xionhub/funnel-app-router-adapter": "^0.0.4",
     "@xionhub/funnel-client": "^0.0.4",
     "@xionhub/funnel-core": "^0.0.4",
