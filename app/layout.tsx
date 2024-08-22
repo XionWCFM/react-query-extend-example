@@ -5,8 +5,8 @@ import { Providers } from "~/src/apps/providers";
 import { Toaster } from "~/src/@deprecated/portal/toast-client";
 import { Logger } from "~/src/@deprecated/logger/example";
 import { OverlayProvider } from "./overlay-provider";
-import { RouteChangesProvider } from "nextjs-router-events";
 import { PORTAL_ID } from "~/src/@deprecated/portal-id";
+import { Toaster as SonnerToaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
         <Providers>
           <OverlayProvider>
             <div className=" bg-gray-100 min-h-screen flex w-screen justify-center">
-              <div className=" bg-white min-w-[430px]">
+              <div className=" bg-white max-w-[420px] w-screen ">
                 {children}
                 <div id="toast" />
                 <div id="dialog" />
@@ -33,6 +33,7 @@ export default function RootLayout({
             </div>
             <Logger />
             <Toaster />
+            <SonnerToaster position={"top-center"} />
             {Object.values(PORTAL_ID).map((id) => (
               <div id={id} key={id} />
             ))}
