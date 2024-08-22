@@ -29,6 +29,7 @@
     "embla-carousel-autoplay": "^8.1.8",
     "es-toolkit": "^1.10.1",
     "jotai": "^2.9.0",
+    "ky": "^1.7.1",
     "lodash": "^4.17.21",
     "next": "14.2.4",
     "next-scroll-restorer": "^0.9.7",

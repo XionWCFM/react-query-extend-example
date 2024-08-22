@@ -3111,6 +3111,11 @@ keyv@^4.5.3:
   dependencies:
     json-buffer "3.0.1"
 
+ky@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/ky/-/ky-1.7.1.tgz#7fbeb9b7b3b5dc9d2a5b56ddb0964788aec36f06"
+  integrity sha512-KJ/IXXkFhTDqxcN8wKqMXk1/UoOpc0UnOB6H7QcqlPInh/M2B5Mlj+i9exez1w4RSwJhNFmHiUDPriAYFwb5VA==
+
 language-subtag-registry@^0.3.20:
   version "0.3.23"
   resolved "https://registry.yarnpkg.com/language-subtag-registry/-/language-subtag-registry-0.3.23.tgz#23529e04d9e3b74679d70142df3fd2eb6ec572e7"
