@@ -1,8 +1,7 @@
 "use client";
 
-import { ScrollRestorer } from "next-scroll-restorer";
 import { useRouter } from "next/navigation";
-import { ClientSideScrollRestorer } from "~/src/client-restorer";
+import { http } from "~/src/http/http";
 
 export default function Home() {
   const router = useRouter();
@@ -10,14 +9,13 @@ export default function Home() {
     <div className="">
       <div className=" min-h-screen bg-purple-50"></div>
       <button
-        onClick={() => {
-          router.push(`/?foo=${Math.random()}`);
+        onClick={async () => {
+          const result = http.get("api/simple");
         }}
       >
         dsadsa
       </button>
       <div className=" min-h-screen bg-purple-50"></div>
-      <ClientSideScrollRestorer />
     </div>
   );
 }
