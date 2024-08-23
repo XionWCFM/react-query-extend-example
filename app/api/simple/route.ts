@@ -8,5 +8,11 @@ const db = [
 ];
 
 export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("Authorization");
+
+  if (!authHeader) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   return NextResponse.json(db);
 }

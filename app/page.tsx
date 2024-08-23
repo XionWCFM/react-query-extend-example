@@ -1,21 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { http } from "~/src/http/http";
+import { http, httpClientAuth } from "~/src/http/http";
 
 export default function Home() {
   const router = useRouter();
   return (
     <div className="">
-      <div className=" min-h-screen bg-purple-50"></div>
       <button
         onClick={async () => {
-          const result = http.get("api/simple");
+          const login = await http.instance.get("api/auth/login");
+          const accessToken = login.headers.get("Authorization");
+          if (accessToken) {
+            localStorage.setItem("accessToken", accessToken);
+          }
+          const result = await httpClientAuth.get("api/simple", { credentials: "include" });
         }}
       >
         dsadsa
       </button>
-      <div className=" min-h-screen bg-purple-50"></div>
     </div>
   );
 }
