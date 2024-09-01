@@ -1,5 +1,4 @@
 import { useQueryClient, useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { mutationOptions } from "./mutation-options";
 
 interface OptimisticOptions<TQueryData, TVariables> {
   queryKey: string[];
