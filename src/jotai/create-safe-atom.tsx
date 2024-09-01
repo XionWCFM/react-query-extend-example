@@ -1,5 +1,5 @@
-import { createContext, PropsWithChildren, useContext } from "react";
-import { useAtom, useAtomValue, useSetAtom, WritableAtom } from "jotai";
+import { Component, ComponentProps, createContext, FunctionComponent, PropsWithChildren, useContext } from "react";
+import { atom, useAtom, useAtomValue, useSetAtom, WritableAtom } from "jotai";
 
 export const createSafeAtom = <Value, Args extends unknown[] = unknown[], Result = any>(
   initialvalue: WritableAtom<Value, Args, Result>,
@@ -14,6 +14,16 @@ export const createSafeAtom = <Value, Args extends unknown[] = unknown[], Result
   };
   const Provider = ({ children }: PropsWithChildren) => {
     return <Context.Provider value={initialvalue}>{children}</Context.Provider>;
+  };
+
+  Provider.with = <T extends Record<string, any>>(Component: FunctionComponent<T>) => {
+    return (props: T) => {
+      return (
+        <Provider>
+          <Component {...props} />
+        </Provider>
+      );
+    };
   };
 
   const useSetContextAtom = () => {
