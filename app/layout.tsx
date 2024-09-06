@@ -6,7 +6,9 @@ import { Toaster } from "~/src/@deprecated/portal/toast-client";
 import { Logger } from "~/src/@deprecated/logger/example";
 import { OverlayProvider } from "./overlay-provider";
 import { PORTAL_ID } from "~/src/@deprecated/portal-id";
-import { Toaster as SonnerToaster } from "sonner";
+import "@xionwcfm/token/style";
+import "@xionwcfm/xds/style";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -33,7 +35,6 @@ export default function RootLayout({
             </div>
             <Logger />
             <Toaster />
-            <SonnerToaster position={"top-center"} />
             {Object.values(PORTAL_ID).map((id) => (
               <div id={id} key={id} />
             ))}
