@@ -27,28 +27,22 @@ export default function Page() {
   return (
     <>
       <Prefetcher />
-
-      <Suspense fallback={<>loading..</>}>
-        <SuperContext>
+      <Suspense fallback={<div>loading</div>}>
+        <Context1Provider>
           <Consumer1 />
 
-          <Consume2 />
-        </SuperContext>
+          <Suspense fallback={<div>consumer 2 loading</div>}>
+            <Context2Provider>
+              <Consume2 />
+            </Context2Provider>
+          </Suspense>
+        </Context1Provider>
 
         <Mutation />
       </Suspense>
     </>
   );
 }
-
-const SuperContext = ({ children }: PropsWithChildren) => {
-  useSuspenseQueries({ queries: [exampleQueryOption(), example2QueryOption()] });
-  return (
-    <Context1Provider>
-      <Context2Provider>{children}</Context2Provider>
-    </Context1Provider>
-  );
-};
 
 const Context1Provider = ({ children }: PropsWithChildren) => {
   const query = useSuspenseQuery(exampleQueryOption());

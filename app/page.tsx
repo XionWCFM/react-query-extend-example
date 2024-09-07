@@ -4,9 +4,34 @@ import { createMutationOptions, MutationBoundary } from "@xionwcfm/react-query";
 import { delay } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
+const useSendmonyMutation = () => {
+  return useMutation({
+    mutationFn: async () => {
+      await delay(5000);
+      if (Math.random() > 0.5) {
+        throw new Error("error");
+      }
+    },
+  });
+};
+
 export default function Home() {
   const { mutate } = useMutation(myMutationOption());
   const router = useRouter();
+  const mutation = useSendmonyMutation();
+
+  const handleClick = () => {
+    router.push("/wating");
+    mutation.mutate(undefined, {
+      onSuccess: () => {
+        router.push("/success");
+      },
+      onError: () => {
+        router.push("/error");
+      },
+    });
+  };
+
   return (
     <div>
       <MutationBoundary
@@ -27,6 +52,7 @@ export default function Home() {
       >
         das
       </button>
+      <button onClick={handleClick}>일단 푸시</button>
     </div>
   );
 }
