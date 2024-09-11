@@ -1,10 +1,12 @@
 "use client";
 
-import { Suspense } from "@suspensive/react";
+import { ErrorBoundary, Suspense } from "@suspensive/react";
 import {
+  QueryErrorResetBoundary,
   queryOptions,
   useIsFetching,
   useMutation,
+  usePrefetchQuery,
   useQueries,
   useQueryClient,
   useSuspenseQueries,
@@ -12,45 +14,64 @@ import {
 } from "@tanstack/react-query";
 import { createSafeContext } from "@xionwcfm/react";
 import { PropsWithChildren, useEffect } from "react";
+import { QueryErrorBoundary, SuspenseQueries } from "@suspensive/react-query";
 import { http } from "~/src/http/http";
 
 type Type = { message: string };
-const exampeFetch = async () => http.get<Type>("api/exam", { cache: "no-cache" });
+const exampeFetch = async () => {
+  if (Math.random() > 0.5) {
+    throw new Error("hello");
+  }
+  return { message: "hello" };
+};
 
-const exampleQueryOption = () => queryOptions({ queryKey: ["hi"], queryFn: exampeFetch });
-const example2QueryOption = () => queryOptions({ queryKey: ["hi2"], queryFn: exampeFetch });
+const exampleQueryOption = () => queryOptions({ queryKey: ["hi"], queryFn: exampeFetch, retry: 0 });
+const example2QueryOption = () => queryOptions({ queryKey: ["hi2"], queryFn: () => ({ message: "hello" }) });
 
-const [Provider1, useContext1] = createSafeContext<Type>(null);
-const [Provider2, useContext2] = createSafeContext<Type>(null);
+export const [Provider1, useContext1] = createSafeContext<Type>(null);
+export const [Provider2, useContext2] = createSafeContext<Type>(null);
 
 export default function Page() {
   return (
     <>
       <Prefetcher />
-      <Suspense fallback={<div>loading</div>}>
-        <Context1Provider>
-          <Consumer1 />
-
-          <Suspense fallback={<div>consumer 2 loading</div>}>
-            <Context2Provider>
-              <Consume2 />
-            </Context2Provider>
-          </Suspense>
-        </Context1Provider>
-
-        <Mutation />
-      </Suspense>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallback={({ reset }) => (
+              <div>
+                <button onClick={reset}>리셋하기</button>
+              </div>
+            )}
+          >
+            <Suspense fallback={<div>consumer 2 loading</div>}>
+              <SuspenseQueries queries={[exampleQueryOption(), example2QueryOption()]}>
+                {([{ data: one }, { data: two }]) => {
+                  return (
+                    <Provider1 value={one}>
+                      <Provider2 value={two}>
+                        <div>
+                          <Consumer1 />
+                        </div>
+                      </Provider2>
+                    </Provider1>
+                  );
+                }}
+              </SuspenseQueries>
+              <Mutation />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </>
   );
 }
 
-const Context1Provider = ({ children }: PropsWithChildren) => {
-  const query = useSuspenseQuery(exampleQueryOption());
-  return <Provider1 value={query.data}>{children}</Provider1>;
-};
-const Context2Provider = ({ children }: PropsWithChildren) => {
-  const query = useSuspenseQuery(example2QueryOption());
-  return <Provider2 value={query.data}>{children}</Provider2>;
+const Provider12 = ({ children }: PropsWithChildren) => {
+  usePrefetchQuery(example2QueryOption());
+  const { data: one } = useSuspenseQuery(exampleQueryOption());
+  return <Provider1 value={one}>{children}</Provider1>;
 };
 
 const Prefetcher = () => {

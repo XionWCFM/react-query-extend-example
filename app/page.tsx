@@ -1,5 +1,6 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
+import { useInputState } from "@xionwcfm/react";
 import { createMutationOptions, MutationBoundary } from "@xionwcfm/react-query";
 import { delay } from "es-toolkit";
 import { useRouter } from "next/navigation";
@@ -31,7 +32,8 @@ export default function Home() {
       },
     });
   };
-
+ // query 명령형
+ // 로딩, 에러, 성공 
   return (
     <div>
       <MutationBoundary

@@ -18,9 +18,11 @@
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.1",
-    "@suspensive/react": "^2.14.2",
+    "@suspensive/react": "^2.16.1",
+    "@suspensive/react-query": "^2.16.1",
     "@tanstack/react-query": "^5.51.9",
     "@use-funnel/browser": "^0.0.3",
+    "@use-funnel/next": "^0.0.4",
     "@xionhub/funnel-app-router-adapter": "^0.0.4",
     "@xionhub/funnel-client": "^0.0.4",
     "@xionhub/funnel-core": "^0.0.4",
@@ -54,7 +56,8 @@
     "use-context-selector": "^2.0.0",
     "use-router-with-events": "^0.1.3",
     "vaul": "^0.9.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
