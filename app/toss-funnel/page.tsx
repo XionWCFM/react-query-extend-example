@@ -1,5 +1,6 @@
 "use client";
-import { useFunnel, createFunnelSteps } from "@use-funnel/next";
+import { useFunnel, createFunnelSteps } from "@use-funnel/browser";
+
 export default function Page() {
   const funnel = useFunnel<{
     이메일입력: 이메일입력;
