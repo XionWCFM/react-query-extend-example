@@ -2476,6 +2476,24 @@ embla-carousel-autoplay@^8.1.8:
   resolved "https://registry.yarnpkg.com/embla-carousel-autoplay/-/embla-carousel-autoplay-8.1.8.tgz#84cd2d68e7498c2919ef102410484b0bb50d36c5"
   integrity sha512-H3vVKt4HR2PGeMlCutE3+a8wv7Jq1rg31Fjb8ZDZaiuSnT/1XTwA83KpkJ02BdImVJci9RS0uEBiXBax2kfnMQ==
 
+embla-carousel-react@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-react/-/embla-carousel-react-8.3.0.tgz#8aa6b9b77c3e900349a7215cb31b7ead6a84a715"
+  integrity sha512-P1FlinFDcIvggcErRjNuVqnUR8anyo8vLMIH8Rthgofw7Nj8qTguCa2QjFAbzxAUTQTPNNjNL7yt0BGGinVdFw==
+  dependencies:
+    embla-carousel "8.3.0"
+    embla-carousel-reactive-utils "8.3.0"
+
+embla-carousel-reactive-utils@8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-reactive-utils/-/embla-carousel-reactive-utils-8.3.0.tgz#75f177ed2f6bdafbaab8f869f936692d08cd488e"
+  integrity sha512-EYdhhJ302SC4Lmkx8GRsp0sjUhEN4WyFXPOk0kGu9OXZSRMmcBlRgTvHcq8eKJE1bXWBsOi1T83B+BSSVZSmwQ==
+
+embla-carousel@8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel/-/embla-carousel-8.3.0.tgz#dc27c63c405aa98320cb36893e4be2fbdc787ee1"
+  integrity sha512-Ve8dhI4w28qBqR8J+aMtv7rLK89r1ZA5HocwFz6uMB/i5EiC7bGI7y+AM80yAVUJw3qqaZYK7clmZMUR8kM3UA==
+
 embla-carousel@^8.1.8:
   version "8.1.8"
   resolved "https://registry.yarnpkg.com/embla-carousel/-/embla-carousel-8.1.8.tgz#cb4e02a1467909d8d59aba2063ab8e2e6262b68c"
