@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { OverlayProvider as OriginalOverlayProvider } from "overlay-kit";
 type OverlayProviderProps = {
   children?: ReactNode;

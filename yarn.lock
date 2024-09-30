@@ -1637,6 +1637,11 @@
   resolved "https://registry.yarnpkg.com/@use-funnel/core/-/core-0.0.4.tgz#1862c47166603ee6b7b468a0e1cad1b7c8dc73bd"
   integrity sha512-EFKuzTDYlQJZg+Z7NbxZOy809wFP1SMPYHizDJpqM7uTOuLqykGszhs7TOSGV6GD2ENjjneiRg0PJnPWK8Lbpw==
 
+"@use-funnel/core@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@use-funnel/core/-/core-0.0.6.tgz#bb987a38f7e9be69df556fd35f1b945474fb4e2f"
+  integrity sha512-g6a+evJGyGndlEMRNaw8LcNCs8xDsDYA3IqpJkQLnDj5jg1SW+em872hNEvz76LNNn5hdBzYHMjHZNFTFy5r7A==
+
 "@use-funnel/next@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@use-funnel/next/-/next-0.0.4.tgz#973b6dee65d290908ef1dbccd622f3bcb7a7f4fe"
@@ -1744,10 +1749,10 @@
   resolved "https://registry.yarnpkg.com/@xionwcfm/utils/-/utils-0.0.3.tgz#e693029fc6113016ad41eae12850d5e16316b3c7"
   integrity sha512-FHwhOIPzaNh4pbrR7z1pRGGQv332jfVtaIwRYxqB5wDUY/iRDj/+vNKgvn1ipLhotSpdINbYkM/TxyEjhZJoyQ==
 
-"@xionwcfm/xds@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@xionwcfm/xds/-/xds-0.0.14.tgz#089630ea06047e6739ae4293d0941b19d46188d4"
-  integrity sha512-k85BzJoSqo/57BzBawYOVmlk07KO7tHlsCMpwa04y06bqeiFTe493PzLsHt9BxbjCwsJhPUHKS1d4Mqau6WXVQ==
+"@xionwcfm/xds@^0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@xionwcfm/xds/-/xds-0.0.23.tgz#6bd0b900ef3682203cd772cea9cea4211ce3fbef"
+  integrity sha512-eK0H8PUy1S3Y3uYs8ySvXKkg9ixJSmkjF4lgO9sBf8zWvSApMZW/pLWxhg7otXjSg8HUoQXGksfQLKAyIrrOOQ==
   dependencies:
     "@radix-ui/react-accordion" "^1.2.0"
     "@radix-ui/react-alert-dialog" "^1.1.1"
@@ -1772,6 +1777,7 @@
     "@xionwcfm/token" "^0.0.6"
     class-variance-authority "^0.7.0"
     clsx "^2.1.1"
+    framer-motion "^11.8.0"
     sonner "^1.5.0"
     tailwind-merge "1.14.0"
     vaul "^0.9.1"
@@ -3028,6 +3034,13 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
 
+framer-motion@^11.8.0:
+  version "11.8.0"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.8.0.tgz#dc15b9ecf3c52ad2b02f43800e721dd6e106c08a"
+  integrity sha512-q/axN/PFRdKmzPK6PO2OhbLUMWXXZuiejdM1/3FhC2hm4YIetc+qeco2EvWm4u1/UTFmevclE492wGFNfSZ4eQ==
+  dependencies:
+    tslib "^2.4.0"
+
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
@@ -3576,10 +3589,10 @@ jiti@^1.21.0:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.6.tgz#6c7f7398dd4b3142767f9a168af2f317a428d268"
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
-jotai@^2.9.3:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-2.9.3.tgz#abcae49a737cd50e3144a6c9eb39840db077c727"
-  integrity sha512-IqMWKoXuEzWSShjd9UhalNsRGbdju5G2FrqNLQJT+Ih6p41VNYe2sav5hnwQx4HJr25jq9wRqvGSWGviGG6Gjw==
+jotai@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-2.10.0.tgz#7483b81ab21ba28778f04b29368728f25efe4e89"
+  integrity sha512-8W4u0aRlOIwGlLQ0sqfl/c6+eExl5D8lZgAUolirZLktyaj4WnxO/8a0HEPmtriQAB6X5LMhXzZVmw02X0P0qQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

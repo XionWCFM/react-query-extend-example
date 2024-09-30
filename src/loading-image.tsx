@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@xionwcfm/xds";
-import { type ComponentProps, Fragment, type ReactNode, useState } from "react";
+import { type ComponentProps, type ComponentPropsWithoutRef, Fragment, type ReactNode, useState } from "react";
 import Image from "next/image";
 
 export const LoadingImage = (props: ComponentProps<typeof Image> & { fallback?: ReactNode }) => {
@@ -21,4 +21,8 @@ export const LoadingImage = (props: ComponentProps<typeof Image> & { fallback?: 
       />
     </Fragment>
   );
+};
+
+const createLoadingImage = (ImageComponent: (props: ComponentPropsWithoutRef<"img">) => ReactNode) => {
+  
 };

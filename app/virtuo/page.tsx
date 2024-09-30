@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Virtuoso } from "react-virtuoso";
 
 // 아이템의 타입을 정의합니다
