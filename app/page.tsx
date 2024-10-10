@@ -1,51 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Portal } from "@radix-ui/react-portal";
+import { createSafeContext, useInputState } from "@xionwcfm/react";
+import { useState } from "react";
 
-export default function Home() {
-  const [state, setState] = useState({ hello: "world" });
-
-  const hi = useCallback(() => {
-    console.log(state);
-  }, []);
-
-  useEffect(() => {
-    const handler = () => {
-      console.log("");
-    };
-    window?.addEventListener("popstate", handler);
-    return () => {
-      window.removeEventListener("popstate", handler);
-    };
-  }, []);
+export default function Page() {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => {
-          hi();
-        }}
-      >
-        유즈콜백 클릭
+      <button onClick={() => setIsOpen((prev) => !prev)} type="button">
+        hello
       </button>
-      <button
-        type="button"
-        onClick={() => {
-          console.log(state);
-        }}
-      >
-        콜백안한 클릭
-      </button>
-
-      <button
-        type="button"
-        onClick={() => {
-          setState({ hello: "hi" });
-        }}
-      >
-        상태 변경
-      </button>
+      <Provider value={{ value: "1" }}>
+        <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </Provider>
     </div>
   );
 }
+
+const Dialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const { value } = useC();
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div>
+      <Portal>
+        <div>{value}</div>
+      </Portal>
+    </div>
+  );
+};
+
+const [Provider, useC] = createSafeContext<{ value: string }>(null);
