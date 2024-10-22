@@ -11,5 +11,6 @@ const config: Config = {
   ],
   theme: XION_STYLE,
   plugins: [],
+  darkMode: "class",
 };
 export default config;
