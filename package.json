@@ -14,7 +14,7 @@
 		"build:workers": "tsc -p tsconfig.worker.json"
 	},
 	"dependencies": {
-		"@hookform/resolvers": "^3.9.0",
+		"@hookform/resolvers": "^3.9.1",
 		"@radix-ui/react-aspect-ratio": "^1.1.0",
 		"@radix-ui/react-dialog": "^1.1.1",
 		"@radix-ui/react-portal": "^1.1.1",
@@ -52,7 +52,7 @@
 		"qs": "^6.13.0",
 		"react": "^18",
 		"react-dom": "^18",
-		"react-hook-form": "^7.52.1",
+		"react-hook-form": "^7.53.1",
 		"react-virtuoso": "^4.10.4",
 		"react18-use": "^0.3.0",
 		"rxjs": "^7.8.1",
